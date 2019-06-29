@@ -219,27 +219,35 @@
             }
           },
           {
-            "Name": {
-              "Fn::Join": [
-                ".",
-                [
-                  "www",
-                  {
-                    "Ref": "WebBucket"
+            "Fn::If": [
+              "IsProduction",
+              {
+                "Name": {
+                  "Fn::Join": [
+                    ".",
+                    [
+                      "www",
+                      {
+                        "Ref": "WebBucket"
+                      }
+                    ]
+                  ]
+                },
+                "Type": "A",
+                "AliasTarget": {
+                  "HostedZoneId": "Z3TAODEIZZ0792",
+                  "DNSName": {
+                    "Fn::GetAtt": [
+                      "CDN",
+                      "DomainName"
+                    ]
                   }
-                ]
-              ]
-            },
-            "Type": "A",
-            "AliasTarget": {
-              "HostedZoneId": "Z3TAODEIZZ0792",
-              "DNSName": {
-                "Fn::GetAtt": [
-                  "CDN",
-                  "DomainName"
-                ]
+                }
+              },
+              {
+                "Ref": "AWS::NoValue"
               }
-            }
+            ]
           }
         ]
       }
