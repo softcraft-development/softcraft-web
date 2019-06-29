@@ -209,7 +209,7 @@
             },
             "Type": "A",
             "AliasTarget": {
-              "HostedZoneId": "Z3TAODEIZZ0792",
+              "HostedZoneId": "Z2FDTNDATAQYW2",
               "DNSName": {
                 "Fn::GetAtt": [
                   "CDN",
@@ -235,7 +235,7 @@
                 },
                 "Type": "A",
                 "AliasTarget": {
-                  "HostedZoneId": "Z3TAODEIZZ0792",
+                  "HostedZoneId": "Z2FDTNDATAQYW2",
                   "DNSName": {
                     "Fn::GetAtt": [
                       "CDN",
