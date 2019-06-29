@@ -67,14 +67,22 @@
               "Ref": "WebBucket"
             },
             {
-              "Fn::Join": [
-                ".",
-                [
-                  "www",
-                  {
-                    "Ref": "WebBucket"
-                  }
-                ]
+              "Fn::If": [
+                "IsProduction",
+                {
+                  "Fn::Join": [
+                    ".",
+                    [
+                      "www",
+                      {
+                        "Ref": "WebBucket"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
               ]
             }
           ],
