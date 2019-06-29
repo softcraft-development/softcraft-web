@@ -102,7 +102,7 @@
           ],
           "PriceClass": "PriceClass_100",
           "ViewerCertificate": {
-            "AcmCertificateArn": "arn:aws:acm:us-east-1:908644658234:certificate/0ba124b6-cc70-42a4-b4a3-a0a4b71b1412",
+            "AcmCertificateArn": "arn:aws:acm:us-west-2:915572028233:certificate/74e1d6ee-4111-4f10-afff-3442604e4787",
             "SslSupportMethod": "sni-only"
           }
         },
