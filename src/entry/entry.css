@@ -1,0 +1,66 @@
+#entry_page  {
+	background-color: black;	
+	color: white;
+}
+
+#entry_page #page_content {
+	width: 840px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px;
+	background-image: url(gears.jpg);
+	background-repeat: no-repeat;
+	background-position: 460px 0px;
+	min-height: 469px;
+	font-size: 90%;
+}
+
+#entry_page #text {
+	width: 420px;
+	padding-top: 105px;
+}
+
+#entry_page #page_header h1,
+#entry_page #page_header h2,
+#entry_page #page_header h3 {
+	font-family: "Gill Sans", "Gill Sans MT", Verdana, Geneva, sans-serif;
+	overflow: hidden;
+	text-indent: -5000px;
+	background:no-repeat;
+	margin-top: 0px;
+}
+
+#entry_page #page_header h1 {
+	background-image: url(softcraft.png);
+	height: 80px;	
+	width: 416px;
+	font-size: 68pt;
+}
+
+#entry_page #page_header h2 {
+	background-image: url(development.png);
+	width: 417px;
+	height: 44px;
+	font-size: 37pt;
+	margin-top: 15px;
+	padding-bottom: 12px;
+	border-bottom: 2px solid white;
+}
+
+#entry_page #page_header h3 {
+	background-image: url(tagline.png);
+	height: 41px;
+	width: 419px;
+	font-size: 27pt;
+	margin-top: 30px;
+}
+
+#entry_page #page_body {
+	margin-top: 45px;	
+}
+
+#entry_page #what_we_do_page_link {
+	font-weight: bold;
+	font-size: 100%;
+	border-bottom: 2px solid rgb(229, 27, 36);
+}

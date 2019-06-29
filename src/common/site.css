@@ -1,0 +1,81 @@
+/*****
+Copyright (c) 2009-2010, Craig Walker. All rights reserved.
+
+Email licensing@softcraft.ca for licensing information.
+*****/
+
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-size: 100%;
+}
+
+img {
+	-ms-interpolation-mode:bicubic;
+}
+
+em {
+	font-style: italic;
+}
+
+strong {
+	font-weight: bold;
+}
+
+input[type=text].example {
+	color: rgb(144,144,144);
+}
+
+div#page_content {
+	font-size: 1.2em;
+	line-height: 125%;
+}
+
+p {
+	margin-bottom: 1.5em;
+}
+
+a:link, a:visited {
+	color: rgb(229,27,36);
+	text-decoration: none;
+}
+
+a:active {
+}
+
+a:hover {
+	border-bottom: solid 1px red;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	line-height: 100%;
+	font-family:"Gill Sans","Gill Sans MT","Century Gothic","Helvetica","Verdana","Arial","sans-serif";
+	text-shadow:0.015em 0.03em 0.1em #CCCCCC;
+	color: rgb(229,27,36);
+	margin-bottom: 0.125em;
+	margin-top: 1em;
+}
+
+h1 {
+	font-size: 300%;
+}
+
+h2 {
+	font-size: 175%;
+}
+
+h3 {
+	font-size: 135%;
+}
+
+.copyright .name {
+	text-transform: uppercase;
+}
+
+.softcraft_development {
+	white-space: nowrap;
+}
+
+.phone {
+	white-space: nowrap;
+}
