@@ -1,0 +1,14 @@
+#!/bin/bash
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-cli-creating-stack.html
+# --parameters ParameterKey=Parm1,ParameterValue=test1 ParameterKey=Parm2,ParameterValue=test2
+SOURCE_DIRECTORY=`dirname "$0"`
+source $SOURCE_DIRECTORY/../init
+ENVIRONMENT=$1
+if [ -z "$ENVIRONMENT" ]; then
+  echo "You must pass the stack environment name"
+  exit 1
+fi
+shift
+STACK_NAME=softcraft-web-$ENVIRONMENT
+# https://docs.aws.amazon.com/cli/latest/reference/cloudformation/create-stack.html
+aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://$SOURCE_DIRECTORY/softcraft-web-stack.json --parameters ParameterKey=Environment,ParameterValue=$ENVIRONMENT $@

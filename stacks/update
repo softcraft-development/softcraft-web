@@ -1,0 +1,12 @@
+#!/bin/bash
+SOURCE_DIRECTORY=`dirname "$0"`
+source $SOURCE_DIRECTORY/../init
+ENVIRONMENT=$1
+if [ -z "$ENVIRONMENT" ]; then
+  echo "You must pass the stack environment name"
+  exit 1
+fi
+shift
+STACK_NAME=softcraft-web-$ENVIRONMENT
+# https://docs.aws.amazon.com/cli/latest/reference/cloudformation/update-stack.html
+aws cloudformation update-stack --stack-name $STACK_NAME --template-body file://$SOURCE_DIRECTORY/softcraft-web-stack.json --parameters ParameterKey=Environment,ParameterValue=$ENVIRONMENT $@

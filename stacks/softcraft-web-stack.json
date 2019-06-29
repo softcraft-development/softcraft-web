@@ -1,0 +1,255 @@
+{
+  "Conditions": {
+    "IsProduction": {
+      "Fn::Equals": [
+        {
+          "Ref": "Environment"
+        },
+        "production"
+      ]
+    }
+  },
+  "Mappings": {
+    "RegionMap": {
+      "us-east-1": {
+        "S3hostedzoneID": "Z3AQBSTGFYJSTF",
+        "websiteendpoint": "s3-website-us-east-1.amazonaws.com"
+      },
+      "us-west-1": {
+        "S3hostedzoneID": "Z2F56UZL2M1ACD",
+        "websiteendpoint": "s3-website-us-west-1.amazonaws.com"
+      },
+      "us-west-2": {
+        "S3hostedzoneID": "Z3BJ6K6RIION7M",
+        "websiteendpoint": "s3-website-us-west-2.amazonaws.com"
+      },
+      "eu-west-1": {
+        "S3hostedzoneID": "Z1BKCTXD74EZPE",
+        "websiteendpoint": "s3-website-eu-west-1.amazonaws.com"
+      },
+      "ap-southeast-1": {
+        "S3hostedzoneID": "Z3O0J2DXBE1FTB",
+        "websiteendpoint": "s3-website-ap-southeast-1.amazonaws.com"
+      },
+      "ap-southeast-2": {
+        "S3hostedzoneID": "Z1WCIGYICN2BYD",
+        "websiteendpoint": "s3-website-ap-southeast-2.amazonaws.com"
+      },
+      "ap-northeast-1": {
+        "S3hostedzoneID": "Z2M4EHUR26P7ZW",
+        "websiteendpoint": "s3-website-ap-northeast-1.amazonaws.com"
+      },
+      "sa-east-1": {
+        "S3hostedzoneID": "Z31GFT0UA1I2HV",
+        "websiteendpoint": "s3-website-sa-east-1.amazonaws.com"
+      }
+    }
+  },
+  "Parameters": {
+    "Environment": {
+      "AllowedPattern": "[a-z0-9-]+",
+      "ConstraintDescription": "Lower case letters, numbers, hyphen.",
+      "Default": "default",
+      "Type": "String"
+    },
+    "ForceUpdate": {
+      "Default": "false",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "CDN": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Aliases": [
+            {
+              "Ref": "WebBucket"
+            },
+            {
+              "Fn::Join": [
+                ".",
+                [
+                  "www",
+                  {
+                    "Ref": "WebBucket"
+                  }
+                ]
+              ]
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "DefaultTTL": 60,
+            "ForwardedValues": {
+              "QueryString": true
+            },
+            "TargetOriginId": "WebBucketOrigin",
+            "ViewerProtocolPolicy": "allow-all"
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "WebBucket",
+                  "DomainName"
+                ]
+              },
+              "Id": "WebBucketOrigin",
+              "S3OriginConfig": {}
+            }
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": {
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:908644658234:certificate/0ba124b6-cc70-42a4-b4a3-a0a4b71b1412",
+            "SslSupportMethod": "sni-only"
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Environment"
+            }
+          }
+        ]
+      }
+    },
+    "WebBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "WebBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "WebBucket"
+                    },
+                    "/*"
+                  ]
+                ]
+              },
+              "Principal": "*"
+            }
+          ]
+        }
+      }
+    },
+    "WebBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicRead",
+        "BucketName": {
+          "Fn::Join": [
+            ".",
+            [
+              {
+                "Fn::If": [
+                  "IsProduction",
+                  {
+                    "Ref": "AWS::NoValue"
+                  },
+                  {
+                    "Ref": "Environment"
+                  }
+                ]
+              },
+              "softcraft.ca"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Environment"
+            }
+          },
+          {
+            "Key": "ForcedUpdate",
+            "Value": {
+              "Ref": "ForceUpdate"
+            }
+          }
+        ],
+        "WebsiteConfiguration": {
+          "ErrorDocument": "error.html",
+          "IndexDocument": "index.html"
+        }
+      }
+    },
+    "WebDNS": {
+      "Type": "AWS::Route53::RecordSetGroup",
+      "Properties": {
+        "HostedZoneName": "softcraft.ca.",
+        "RecordSets": [
+          {
+            "Name": {
+              "Ref": "WebBucket"
+            },
+            "Type": "A",
+            "AliasTarget": {
+              "HostedZoneId": "Z2FDTNDATAQYW2",
+              "DNSName": {
+                "Fn::GetAtt": [
+                  "CDN",
+                  "DomainName"
+                ]
+              }
+            }
+          },
+          {
+            "Name": {
+              "Fn::Join": [
+                ".",
+                [
+                  "www",
+                  {
+                    "Ref": "WebBucket"
+                  }
+                ]
+              ]
+            },
+            "Type": "A",
+            "AliasTarget": {
+              "HostedZoneId": "Z2FDTNDATAQYW2",
+              "DNSName": {
+                "Fn::GetAtt": [
+                  "CDN",
+                  "DomainName"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "Url": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "WebBucket"
+            }
+          ]
+        ]
+      }
+    }
+  }
+}
